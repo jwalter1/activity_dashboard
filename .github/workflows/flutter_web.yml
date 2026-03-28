@@ -1,0 +1,35 @@
+name: Flutter Web Deploy
+
+on:
+  push:
+    branches:
+      - main # Workflow triggers when you push to main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Web Application
+        # IMPORTANT: Change YOUR_REPO_NAME to the exact name of your GitHub repository.
+        # If your repo is named "my-activity-tracker", it should be "/my-activity-tracker/".
+        # If deploying to a custom domain or a username github.io repo, simply use "/"
+        run: flutter build web --base-href /activity_dashboard/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          publish_branch: gh-pages # Pushes the built files to this branch
