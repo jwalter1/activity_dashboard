@@ -5,7 +5,9 @@ import '../widgets/timeline_view.dart';
 import '../widgets/analyze_view.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final VoidCallback onThemeToggle;
+  
+  const DashboardScreen({super.key, required this.onThemeToggle});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -56,6 +58,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
+          IconButton(
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.dark 
+                ? Icons.light_mode 
+                : Icons.dark_mode,
+            ),
+            onPressed: widget.onThemeToggle,
+            tooltip: 'Toggle theme',
+          ),
           if (_selectedIndex == 0) // Only show timeline toggle on the dashboard tab
             IconButton(
               icon: Icon(_showTimeline ? Icons.list : Icons.calendar_today),
